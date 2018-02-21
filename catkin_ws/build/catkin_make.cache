@@ -1,2 +1,0 @@
-listener:send_velocity_commands:teleop_twist_keyboard:turtlebot_gazebo_multiple:turtlebot_simulator/turtlebot_gazebo:turtlebot_simulator/turtlebot_simulator:turtlebot_simulator/turtlebot_stage:turtlebot_simulator/turtlebot_stdr
--DCATKIN_DEVEL_PREFIX=/home/jgm139/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/jgm139/catkin_ws/install -G Unix Makefiles
