@@ -32,8 +32,11 @@ public:
 
     char cmd[50];
     while(nh_.ok()){
-
       std::cin.getline(cmd, 50);
+
+      
+
+
       if(cmd[0]!='+' && cmd[0]!='l' && cmd[0]!='r' && cmd[0]!='.')
       {
         std::cout << "unknown command:" << cmd << "\n";
