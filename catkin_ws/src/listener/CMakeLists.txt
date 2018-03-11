@@ -136,7 +136,7 @@ include_directories(
 ## Specify libraries to link a library or executable target against
  target_link_libraries(listener
    ${catkin_LIBRARIES}
-${OpenCV_LIBRARIES}
+   ${OpenCV_LIBRARIES}
  )
 
 

@@ -6,7 +6,7 @@ project(send_velocity_commands)
 ## is used, also find other catkin packages
 
 ## System dependencies are found with CMake's conventions
-find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs geometry_msgs std_msgs )
+find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs geometry_msgs std_msgs image_transport cv_bridge)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(OpenCV REQUIRED)
 
@@ -133,6 +133,7 @@ include_directories(
 ## Specify libraries to link a library or executable target against
  target_link_libraries(send_velocity_commands_node
    ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
  )
 
 #############
