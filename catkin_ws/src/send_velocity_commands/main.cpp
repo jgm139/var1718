@@ -63,15 +63,15 @@ class RobotDriver{
 					//turn left (yaw) and drive forward at the same time
 					else if(cmd[0]=='l'){
 						base_cmd.angular.z = 0.75;
-						base_cmd.linear.x = 0.15;
-						ficheroDatos << "images/image" << s << ".png;0.75;0.15" << endl;
+						base_cmd.linear.x = 0.05;
+						ficheroDatos << "images/image" << s << ".png;0.05;0.75" << endl;
 						ros::spinOnce();
 					} 
 					//turn right (yaw) and drive forward at the same time
 					else if(cmd[0]=='r'){
 						base_cmd.angular.z = -0.75;
-						base_cmd.linear.x = 0.15;
-						ficheroDatos << "images/image" << s << ".png;-0.75;0.15" << endl;
+						base_cmd.linear.x = 0.05;
+						ficheroDatos << "images/image" << s << ".png;-0.05;0.75" << endl;
 						ros::spinOnce();
 					} 
 					//quit
@@ -104,7 +104,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg){
 		fileName += ".png";
 		
 		cv::Mat dest;
-		cv::resize(cv_bridge::toCvShare(msg, "bgr8")->image, dest, cv::Size(25,25));
+		cv::resize(cv_bridge::toCvShare(msg, "bgr8")->image, dest, cv::Size(224,224));
 		cv::imwrite(fileName, dest);
 		cv::waitKey(30);
 		
