@@ -8,7 +8,6 @@
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
 #include <message_filters/sync_policies/exact_time.h>
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -96,8 +95,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg, const nav_msgs::O
 		ficheroDatos << ";" << odomMsg->twist.twist.angular.z << endl;
 		try{
 			string s = static_cast<ostringstream*>( &(ostringstream() << cont) )->str();
-			string fileName = "images/image" + s;
-			fileName += ".png";
+			string fileName = "images/image" + s + ".png";
 			
 			cv::Mat dest;
 			cv::resize(cv_bridge::toCvShare(imageMsg, "mono8")->image, dest, cv::Size(224,224));
