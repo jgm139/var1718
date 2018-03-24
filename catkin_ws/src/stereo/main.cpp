@@ -7,6 +7,7 @@
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
 #include <message_filters/sync_policies/exact_time.h>
+#include <sensor_msgs/CameraInfo.h>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -15,7 +16,7 @@ using namespace std;
 using namespace sensor_msgs;
 using namespace message_filters;
 
-void imageTraseraCallback(const sensor_msgs::ImageConstPtr& t1, const sensor_msgs::ImageConstPtr& t2){
+void imageTraseraCallback(const sensor_msgs::ImageConstPtr& t1, const sensor_msgs::ImageConstPtr& t2, const CameraInfoConstPtr& cam){
 
     string fileT1 = "images/traseras/t1.png";
     string fileT2 = "images/traseras/t2.png";
@@ -29,6 +30,8 @@ void imageTraseraCallback(const sensor_msgs::ImageConstPtr& t1, const sensor_msg
     cv::resize(cv_bridge::toCvShare(t2, "mono8")->image, m2, cv::Size(224,224));
     cv::imwrite(fileT2, m2);
     cv::waitKey(30);
+
+    cout << cam << endl;
 }
 
 int main(int argc, char **argv){
@@ -37,9 +40,10 @@ int main(int argc, char **argv){
 
     message_filters::Subscriber<Image> t1_sub(nh, "robot1/trasera1/trasera1/rgb/image_raw", 1);
 	message_filters::Subscriber<Image> t2_sub(nh, "robot1/trasera2/trasera2/rgb/image_raw", 1);
+    message_filters::Subscriber<CameraInfo> cam_sub(nh, "robot1/trasera1/trasera1/rgb/camera_info", 1);
 
-  	TimeSynchronizer<Image, Image> sync(t1_sub, t2_sub, 10);
-  	sync.registerCallback(boost::bind(&imageTraseraCallback, _1, _2));
+  	TimeSynchronizer<Image, Image, CameraInfo> sync(t1_sub, t2_sub, 10);
+  	sync.registerCallback(boost::bind(&imageTraseraCallback, _1, _2, _3));
 
     ros::Rate rate(10.0);
     while(nh.ok()){
