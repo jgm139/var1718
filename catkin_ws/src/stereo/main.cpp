@@ -42,7 +42,7 @@ int main(int argc, char **argv){
 	message_filters::Subscriber<Image> t2_sub(nh, "robot1/trasera2/trasera2/rgb/image_raw", 1);
     message_filters::Subscriber<CameraInfo> cam_sub(nh, "robot1/trasera1/trasera1/rgb/camera_info", 1);
 
-  	TimeSynchronizer<Image, Image, CameraInfo> sync(t1_sub, t2_sub, 10);
+  	TimeSynchronizer<Image, Image, CameraInfo> sync(t1_sub, t2_sub, cam_sub, 10);
   	sync.registerCallback(boost::bind(&imageTraseraCallback, _1, _2, _3));
 
     ros::Rate rate(10.0);
