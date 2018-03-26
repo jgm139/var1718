@@ -16,6 +16,10 @@ using namespace std;
 using namespace sensor_msgs;
 using namespace message_filters;
 
+
+int lastChar = 0;
+bool save = true;
+
 class RobotDriver{
   	private:
 		//! The node handle we'll be using
@@ -40,42 +44,47 @@ class RobotDriver{
 			//we will be sending commands of type "twist"
 			geometry_msgs::Twist base_cmd;
 
-			char cmd[50];
-			
-			while(nh_.ok()){
-				cin.getline(cmd, 50);
-				ros::spinOnce();
+			char cmd = 0;
 
-				if(cmd[0]!='w' && cmd[0]!='a' && cmd[0]!='d' && cmd[0]!='.'){
+			system ("/bin/stty raw");
+			while(nh_.ok()){
+				cmd = getchar(); 
+				if(cmd!='w' && cmd!='a' && cmd!='d' && cmd!='.' && cmd!='b'){
 					cout << "unknown command:" << cmd << "\n";
 					continue;
 				}
 
 				base_cmd.linear.x = base_cmd.linear.y = base_cmd.angular.z = 0;   
 				//move forward
-				if(cmd[0]=='w'){
+				if(cmd=='w'){
 					base_cmd.linear.x += 0.4;
+					lastChar = 1;
 				} 
 				//turn left (yaw) and drive forward at the same time
-				else if(cmd[0]=='a'){
+				else if(cmd=='a'){
 					base_cmd.angular.z += 0.3;
 					base_cmd.linear.x += 0.4;
+					lastChar = 2;
 				} 
 				//turn right (yaw) and drive forward at the same time
-				else if(cmd[0]=='d'){
+				else if(cmd=='d'){
 					base_cmd.angular.z += -0.3;
 					base_cmd.linear.x += 0.4;
-					
-				} 
-				//quit
-				else if(cmd[0]=='.'){
+					lastChar = 3;
+				}
+				//stop/start record
+				else if (cmd == 'b'){
+					save = !save;
+				}
+				//exit
+				else if(cmd=='.'){
 					break;
 				}
-
+				ros::spinOnce();
 				//publish the assembled command
 				cmd_vel_pub_.publish(base_cmd);
 			}
-			
+			system ("/bin/stty cooked");
 			return true;
 		}
 
@@ -91,30 +100,33 @@ void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg, const nav_msgs::O
 	ficheroDatos.open(datosNav.c_str(), ios::out | ios::app);
 
 	if(ficheroDatos.is_open()){
-		ficheroDatos << "images/image" << cont << ";" << odomMsg->twist.twist.linear.x;
-		ficheroDatos << ";" << odomMsg->twist.twist.angular.z << endl;
-		try{
-			string s = static_cast<ostringstream*>( &(ostringstream() << cont) )->str();
-			string fileName = "images/image" + s + ".png";
-			
-			cv::Mat dest;
-			cv::resize(cv_bridge::toCvShare(imageMsg, "mono8")->image, dest, cv::Size(224,224));
-			cv::imwrite(fileName, dest);
+		if(save){
+			ficheroDatos << "images/image" << cont << ".png;" << odomMsg->twist.twist.linear.x;
+			ficheroDatos << ";" << odomMsg->twist.twist.angular.z << ";" << lastChar << endl;
+			try{
+				string s = static_cast<ostringstream*>( &(ostringstream() << cont) )->str();
+				string fileName = "data/test3/image" + s + ".png";
+				
+				cv::Mat dest;
+				cv::resize(cv_bridge::toCvShare(imageMsg, "mono8")->image, dest, cv::Size(224,224));
+				cv::imshow("Vista Conductor", dest);
+				cv::imwrite(fileName, dest);
+				cv::waitKey(30);
+				
+				cont++;
+			}
+			catch (cv_bridge::Exception& e){
+				ROS_ERROR("Could not convert from '%s' to 'bgr8'.", imageMsg->encoding.c_str());
+			}
+		}else{
+			cv::imshow("Vista Conductor", cv_bridge::toCvShare(imageMsg, "mono8")->image);
 			cv::waitKey(30);
-			
-			cont++;
-		}
-		catch (cv_bridge::Exception& e){
-			ROS_ERROR("Could not convert from '%s' to 'bgr8'.", imageMsg->encoding.c_str());
 		}
 	}
 	ficheroDatos.close();
 }
 
 int main(int argc, char** argv){
-	/*
-	imagen;linear.x;angular.z
-	*/
 	ros::init(argc, argv, "robot_control");
 
 	ros::NodeHandle nh;
