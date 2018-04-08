@@ -48,7 +48,7 @@ void imageTraseraCallback(const sensor_msgs::ImageConstPtr& t1, const sensor_msg
     normalize(disp, disp8, 0, 255, CV_MINMAX, CV_8U);
     
     /*imshow("final2", disp8);
-    waitKey(5);*/
+    waitKey(5);
 
     float CM1f[3][3], CM2f[3][3], D1f[5], D2f[5];
     unsigned i = 0;
@@ -62,15 +62,15 @@ void imageTraseraCallback(const sensor_msgs::ImageConstPtr& t1, const sensor_msg
     for(i = 0;i<5;i++){
         D1f[i] = cam->R[i];
         D2f[i] = cam2->R[i];
-    }
+    }*/
 
    // Mat CM1(3,3,CV_32FC1, &CM1f), CM2(3,3,CV_32FC1, &CM2f), D1(1,5,CV_32FC1, &D1f), D2(1,5,CV_32FC1, &D2f);
 
-    double r[3][3] = {{9.998381e-01, 1.610234e-02, 8.033237e-03},{-1.588968e-02, 9.995390e-01, -2.586908e-02 },{-8.446087e-03, 2.573724e-02, 9.996331e-01}};
+   /* double r[3][3] = {{9.998381e-01, 1.610234e-02, 8.033237e-03},{-1.588968e-02, 9.995390e-01, -2.586908e-02 },{-8.446087e-03, 2.573724e-02, 9.996331e-01}};
     double t[3][4] = {{ -5.706425e-01}, {8.447320e-03}, {1.235975e-02}};
 
     Mat R (3,3, CV_64FC1, r);
-    Mat T (3,1, CV_64FC1, t);
+    Mat T (3,1, CV_64FC1, t);*/
 
     //Mat R1, R2, T1, T2, Q, P1, P2;
 
@@ -111,7 +111,6 @@ int main(int argc, char **argv){
         ros::spinOnce();
         rate.sleep();
     }
-
     ros::spin();
     ros::shutdown();
 }

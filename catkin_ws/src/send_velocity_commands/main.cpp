@@ -18,7 +18,7 @@ using namespace message_filters;
 
 
 int lastChar = 0;
-bool save = true;
+bool save = false;
 
 class RobotDriver{
   	private:
@@ -101,14 +101,14 @@ void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg, const nav_msgs::O
 
 	if(ficheroDatos.is_open()){
 		if(save){
-			ficheroDatos << "images/image" << cont << ".png;" << odomMsg->twist.twist.linear.x;
+			ficheroDatos << "test6/image" << cont << ".png;" << odomMsg->twist.twist.linear.x;
 			ficheroDatos << ";" << odomMsg->twist.twist.angular.z << ";" << lastChar << endl;
 			try{
 				string s = static_cast<ostringstream*>( &(ostringstream() << cont) )->str();
-				string fileName = "data/test3/image" + s + ".png";
+				string fileName = "data/test6/image" + s + ".png";
 				
 				cv::Mat dest;
-				cv::resize(cv_bridge::toCvShare(imageMsg, "mono8")->image, dest, cv::Size(224,224));
+				cv::resize(cv_bridge::toCvShare(imageMsg, "mono8")->image, dest, cv::Size(40,40));
 				cv::imshow("Vista Conductor", dest);
 				cv::imwrite(fileName, dest);
 				cv::waitKey(30);

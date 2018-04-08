@@ -1,3 +1,4 @@
 catkin_ws/build/*
+catkin_ws/data
 catkin_ws/devel/*
-catkin_ws/images/*
+catkin_ws/weights
