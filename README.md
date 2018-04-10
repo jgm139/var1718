@@ -18,7 +18,7 @@ roslaunch turtlebot_gazebo_multiple create_multi_robot.launch
 
 
 ## 1.1 Navegación
----
+
 Para poder capturar datos manualmente para el apartado de _navegación_ se utiliza el paquete `send_velocity_boolean`:
 
 ```bash
@@ -33,7 +33,7 @@ rosrun robot_navegation main.py
 
 
 ## 1.2 Imagen Stereo
----
+
 Para poder probar la **Imagen Stereo** `stereo`:
 
 ```bash
@@ -42,7 +42,7 @@ rosrun stereo stereo_node
 
 
 ## 1.3 Detección del otro robot
----
+
 Para poder capturar datos manualmente para el apartado de _detección_ se utiliza el paquete `getPhotosImageRecognition`:
 
 ```bash
@@ -55,7 +55,7 @@ Para ejecutar la _detección_ y ver cómo el **robot1** detecta el **robot2**, s
 rosrun robot_recognition main.py
 ```
 
-
+---
 
 ### Documentación
 > Para mayor detalle de la implementación de la práctica, así como los experimentos y problemas encontrados en su realización, ver `VAR1718_P1.ipynb`.
