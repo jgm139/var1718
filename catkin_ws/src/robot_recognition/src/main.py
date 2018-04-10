@@ -5,24 +5,15 @@ roslib.load_manifest('robot_recognition')
 import sys
 import rospy
 import cv2
-from std_msgs.msg import String
+import numpy as np
 from sensor_msgs.msg import Image
 from nav_msgs.msg import Odometry
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Twist
-import pygame, sys
-from pygame.locals import *
-
-import numpy as np
-import glob
-import csv
+import pygame
 from keras.applications.mobilenet import MobileNet
-from keras.utils import np_utils
-from keras.callbacks import ModelCheckpoint
-from keras.preprocessing.image import load_img
 from keras.models import Model
 from keras.layers import Dense, Input
-from keras import optimizers
 from keras import backend as K
 
 img_rows, img_cols = 224, 224

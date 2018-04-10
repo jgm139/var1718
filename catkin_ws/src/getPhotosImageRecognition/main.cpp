@@ -1,20 +1,15 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
-#include <nav_msgs/Odometry.h>
-#include <message_filters/subscriber.h>
-#include <message_filters/time_synchronizer.h>
-#include <message_filters/sync_policies/exact_time.h>
-#include <fstream>
-#include <string>
-#include <sstream>
 
 using namespace std;
 using namespace sensor_msgs;
-using namespace message_filters;
 
 
 int lastChar = 0;
@@ -37,8 +32,8 @@ class RobotDriver{
 
 		//! Loop forever while sending drive commands based on keyboard input
 		bool driveKeyboard(){
-			cout << "Type a command and then press enter.  "
-				"Use 'w' to move forward, 'a' to turn left, "
+			cout << "Type a command.  "
+				"IMPORTANT: Use 'p' to take photos to the other robot, 'a' to turn left, "
 				"'d' to turn right, '.' to exit.\n";
 
 			//we will be sending commands of type "twist"
@@ -99,7 +94,7 @@ vector<uint8_t> v;
 fstream ficheroDatos;
 string datosNav = "datosNav.txt";
 
-void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg, const nav_msgs::Odometry::ConstPtr& odomMsg){
+void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg){
 	ficheroDatos.open(datosNav.c_str(), ios::out | ios::app);
 
 	if(ficheroDatos.is_open()){
@@ -130,17 +125,14 @@ void imageCallback(const sensor_msgs::ImageConstPtr& imageMsg, const nav_msgs::O
 }
 
 int main(int argc, char** argv){
-	ros::init(argc, argv, "robot_control");
+	ros::init(argc, argv, "getPhotosRecognition");
 
 	ros::NodeHandle nh;
 
 	RobotDriver driver(nh);
 
-	message_filters::Subscriber<Image> image_sub(nh, "robot1/camera/rgb/image_raw", 1000);
-	message_filters::Subscriber<nav_msgs::Odometry> odom_sub(nh, "robot1/odom", 1000);
-
-  	TimeSynchronizer<Image, nav_msgs::Odometry> sync(image_sub, odom_sub, 10);
-  	sync.registerCallback(boost::bind(&imageCallback, _1, _2));
+	image_transport::ImageTransport it(nh);
+	image_transport::Subscriber sub = it.subscribe("robot1/camera/rgb/image_raw", 1, imageCallback);
 
 	driver.driveKeyboard();
 	ros::shutdown();

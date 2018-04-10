@@ -5,26 +5,13 @@ roslib.load_manifest('robot_navegation')
 import sys
 import rospy
 import cv2
-from std_msgs.msg import String
 from sensor_msgs.msg import Image
-from nav_msgs.msg import Odometry
 from cv_bridge import CvBridge, CvBridgeError
 from geometry_msgs.msg import Twist
-import pygame, sys
-from pygame.locals import *
-
 import numpy as np
-import glob
-import csv
 from keras.applications.mobilenet import MobileNet
-from keras.utils import np_utils
-from keras.callbacks import ModelCheckpoint
-from keras.preprocessing.image import load_img
-from keras import optimizers
-from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Activation, Flatten, MaxPooling2D, Input
-from keras.layers.convolutional import Conv2D
-from keras.layers.advanced_activations import LeakyReLU
+from keras.models import Model
+from keras.layers import Dense, Input
 from keras import backend as K
 
 
@@ -32,44 +19,6 @@ image_size = 224
 input_shape = (image_size, image_size, 3)
 input_tensor = Input(shape=input_shape)
 K.set_image_data_format('channels_last')
-
-
-def cnn_model2(input_shape):
-
-    inputs = Input(shape=(input_shape))
-
-    x = Conv2D(64, (3, 3), padding='same')(inputs)
-    x = LeakyReLU(alpha=.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    
-    x = Conv2D(128, (3, 3), padding='same')(inputs)
-    x = LeakyReLU(alpha=.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-
-    x = Conv2D(64, (3, 3), padding='same')(x)
-    x = LeakyReLU(alpha=.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Dropout(0.5)(x)
-
-    x = Conv2D(32, (3, 3), padding='same')(x)
-    x = LeakyReLU(alpha=0.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    
-    x = Conv2D(64, (3, 3), padding='same')(x)
-    x = LeakyReLU(alpha=.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    x = Dropout(0.5)(x)
-    
-    x = Conv2D(64, (2, 2), padding='same')(x)
-    x = LeakyReLU(alpha=.001)(x)
-    x = MaxPooling2D(pool_size=(2, 2))(x)
-    
-    x = Flatten()(x)
-    prediction = Dense(2, activation="sigmoid")(x)
-
-    model = Model(inputs=inputs, outputs=prediction)
-
-    return model
 
 def cnn_model(input_shape):
     mobilenet_model = MobileNet(input_shape=input_shape,

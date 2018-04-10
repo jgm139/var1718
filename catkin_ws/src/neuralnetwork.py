@@ -1,13 +1,8 @@
 import numpy as np
-import glob
-import csv
 from keras.applications.mobilenet import MobileNet
-from keras.utils import np_utils
-from keras.callbacks import ModelCheckpoint
 from keras.preprocessing.image import load_img
 from keras.models import Model
 from keras.layers import Dense, Input
-from keras import optimizers
 from keras import backend as K
 
 batch_size = 2
