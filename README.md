@@ -58,4 +58,4 @@ rosrun robot_recognition main.py
 ---
 
 ### Documentación
-> Para mayor detalle de la implementación de la práctica, así como los experimentos y problemas encontrados en su realización, ver [VAR1718_P1.ipynb](https://github.com/jgm139/var1718/blob/master/doc/VAR1718_P1.ipynb).
+> Para mayor detalle de la implementación de la práctica, así como los experimentos y problemas encontrados en su realización, ver [VAR1718_P1.md](https://github.com/jgm139/var1718/blob/master/doc/VAR1718_P1.md).
